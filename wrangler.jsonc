@@ -21,6 +21,7 @@
     // Each account's password is a secret named PASS_ + the address in capitals,
     // with every character that is not a letter or digit replaced by "_"
     // (e.g. contato@carlosdalmaso.com.br -> PASS_CONTATO_CARLOSDALMASO_COM_BR).
-    "IMAP_ACCOUNTS": "contato@carlosdalmaso.com.br,suporte@carlosdalmaso.com.br,financeiro@carlosdalmaso.com.br,noreply@carlosdalmaso.com.br,suporte@thermoconnection.com.br,noreply@thermoconnection.com.br,thermoconnection@thermoconnection.com.br,suporte@thermosaude.com.br,contato@thermostore.com.br"
+    // An entry "email|host|username" uses another server/login (iCloud: app-specific password).
+    "IMAP_ACCOUNTS": "contato@carlosdalmaso.com.br,suporte@carlosdalmaso.com.br,financeiro@carlosdalmaso.com.br,noreply@carlosdalmaso.com.br,suporte@thermoconnection.com.br,noreply@thermoconnection.com.br,thermoconnection@thermoconnection.com.br,suporte@thermosaude.com.br,contato@thermostore.com.br,dalmasont@icloud.com|imap.mail.me.com|dalmasont"
   }
 }

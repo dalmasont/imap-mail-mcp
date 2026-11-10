@@ -23,10 +23,13 @@ const apiHandler = {
     };
     const connect = async (a: Account): Promise<ImapSession> => {
       const imap = new CFImap({
-        host: env.IMAP_HOST,
+        host: a.host ?? env.IMAP_HOST,
         port: Number(env.IMAP_PORT),
         tls: String(env.IMAP_TLS) !== "false",
-        auth: { username: a.email, password: passwordOf(a) ?? "" },
+        auth: {
+          username: a.username ?? a.email,
+          password: passwordOf(a) ?? "",
+        },
         timeoutMs: 20000,
       });
       await imap.connect();

@@ -3,7 +3,13 @@
  * opens an authenticated session for an account, so tests can fake it.
  */
 
-export type Account = { email: string; secret: string };
+/** host/username override the defaults (IMAP_HOST, the e-mail address) */
+export type Account = {
+  email: string;
+  secret: string;
+  host?: string;
+  username?: string;
+};
 
 export type MessageSummary = {
   uid: number;
@@ -91,12 +97,24 @@ export function secretNameFor(email: string): string {
   return `PASS_${email.toUpperCase().replace(/[^A-Z0-9]/g, "_")}`;
 }
 
+/** Comma-separated entries: "email" or "email|host|username" */
 export function parseAccounts(list: string): Account[] {
   return list
     .split(",")
-    .map((s) => s.trim().toLowerCase())
+    .map((s) => s.trim())
     .filter((s) => s.length > 0)
-    .map((email) => ({ email, secret: secretNameFor(email) }));
+    .map((entry) => {
+      const [rawEmail = "", host, username] = entry
+        .split("|")
+        .map((p) => p.trim());
+      const email = rawEmail.toLowerCase();
+      return {
+        email,
+        secret: secretNameFor(email),
+        ...(host ? { host } : {}),
+        ...(username ? { username } : {}),
+      };
+    });
 }
 
 function summarize(e: FetchedEmail): MessageSummary {

@@ -86,6 +86,12 @@ describe("accounts", () => {
       "PASS_CONTATO_CARLOSDALMASO_COM_BR",
     );
     expect(accounts[0]?.email).toBe("contato@ex.com.br");
+    expect(parseAccounts("Me@iCloud.com|imap.mail.me.com|me")[0]).toEqual({
+      email: "me@icloud.com",
+      secret: "PASS_ME_ICLOUD_COM",
+      host: "imap.mail.me.com",
+      username: "me",
+    });
   });
   test("unknown or unconfigured accounts fail without connecting", async () => {
     const { s } = fake([]);
