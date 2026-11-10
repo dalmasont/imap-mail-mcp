@@ -2,6 +2,7 @@ import { OAuthProvider } from "@cloudflare/workers-oauth-provider";
 import { createMcpHandler } from "agents/mcp/server";
 import { CFImap } from "cf-imap";
 import { handleAuthorize } from "./authorize.ts";
+import { diagnoseConnection } from "./diag.ts";
 import {
   type Account,
   type ImapSession,
@@ -44,7 +45,15 @@ const apiHandler = {
           e?.cause ? `cause: ${JSON.stringify(e.cause)}` : "",
           e?.stack ?? "",
         );
-        throw err;
+        // Temporary: attach a step-by-step connection test to the error the
+        // tool returns, so it can be read from the chat.
+        const diag = await diagnoseConnection(
+          host,
+          Number(env.IMAP_PORT),
+        ).catch((d) => ({ diagFailed: String(d) }));
+        throw new Error(
+          `${e?.name}: ${e?.message} | diag: ${JSON.stringify(diag)}`,
+        );
       }
       console.log(`[imap] connected ${a.email} in ${Date.now() - t0}ms`);
       return imap as unknown as ImapSession;
