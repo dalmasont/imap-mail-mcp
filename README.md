@@ -13,8 +13,7 @@ Flagged (starred) messages are never moved or deleted. Nothing is ever deleted p
 ## Secrets (Cloudflare dashboard → Worker → Settings → Variables and Secrets)
 
 - `AUTH_PASSWORD`: password for the consent page when connecting Claude (16+ characters).
-- One per account: `PASS_` + the address in capitals with every non-letter/digit replaced by `_`,
-  e.g. `contato@carlosdalmaso.com.br` → `PASS_CONTATO_CARLOSDALMASO_COM_BR`.
+- One per account: `PASS_` + the address in capitals with every non-letter/digit replaced by `_`.
 
 ## Connect
 
