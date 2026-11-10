@@ -32,7 +32,21 @@ const apiHandler = {
         },
         timeoutMs: 20000,
       });
-      await imap.connect();
+      const host = a.host ?? env.IMAP_HOST;
+      const t0 = Date.now();
+      console.log(`[imap] connecting ${a.email} -> ${host}:${env.IMAP_PORT}`);
+      try {
+        await imap.connect();
+      } catch (err) {
+        const e = err as Error & { cause?: unknown };
+        console.error(
+          `[imap] connect FAILED ${a.email} after ${Date.now() - t0}ms: ${e?.name}: ${e?.message}`,
+          e?.cause ? `cause: ${JSON.stringify(e.cause)}` : "",
+          e?.stack ?? "",
+        );
+        throw err;
+      }
+      console.log(`[imap] connected ${a.email} in ${Date.now() - t0}ms`);
       return imap as unknown as ImapSession;
     };
     const tools = new MailTools(
