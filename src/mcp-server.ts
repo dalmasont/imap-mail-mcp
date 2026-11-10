@@ -1,5 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/server";
 import { z } from "zod";
+import { diagnoseConnection } from "./diag.ts";
 import type { MailTools } from "./mail.ts";
 
 const SERVER_INFO = { name: "imap-mail-mcp", version: "0.1.0" };
@@ -153,6 +154,21 @@ export function createMcpServer(tools: MailTools): McpServer {
       },
     },
     async (input) => json(await tools.setRead(input)),
+  );
+
+  server.registerTool(
+    "diagnose_connection",
+    {
+      title: "Diagnose mail server connection",
+      description:
+        "Temporary: test how far a connection from this Worker gets to a mail server (TLS and plain TCP: open, first bytes). Never sends a password.",
+      inputSchema: z.object({
+        host: z.enum(["imap.hostinger.com", "imap.mail.me.com"]),
+        port: z.union([z.literal(993), z.literal(143)]),
+      }),
+      annotations: { readOnlyHint: true, openWorldHint: true },
+    },
+    async (input) => json(await diagnoseConnection(input.host, input.port)),
   );
 
   return server;
