@@ -1,0 +1,26 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "imap-mail-mcp",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "workers_dev": true,
+  "preview_urls": false,
+  "kv_namespaces": [{ "binding": "OAUTH_KV" }],
+  "ratelimits": [
+    {
+      "name": "AUTHORIZE_LIMITER",
+      "namespace_id": "1002",
+      "simple": { "limit": 5, "period": 60 }
+    }
+  ],
+  "vars": {
+    "IMAP_HOST": "imap.hostinger.com",
+    "IMAP_PORT": "993",
+    "IMAP_TLS": "true",
+    // Each account's password is a secret named PASS_ + the address in capitals,
+    // with every character that is not a letter or digit replaced by "_"
+    // (e.g. contato@carlosdalmaso.com.br -> PASS_CONTATO_CARLOSDALMASO_COM_BR).
+    "IMAP_ACCOUNTS": "contato@carlosdalmaso.com.br,suporte@carlosdalmaso.com.br,financeiro@carlosdalmaso.com.br,noreply@carlosdalmaso.com.br,suporte@thermoconnection.com.br,noreply@thermoconnection.com.br,thermoconnection@thermoconnection.com.br,suporte@thermosaude.com.br,contato@thermostore.com.br"
+  }
+}
